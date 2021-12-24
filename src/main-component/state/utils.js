@@ -1,9 +1,16 @@
+// import { object } from "yup"
+
 export const getInitialState = (initialValue) =>{
+    const obj = {...initialValue}
+
     return {
-        values:initialValue,
+        values:obj,
         isDirty:false,
         isValid:true,
-        touched:{},
+        touched:Object.keys(obj).reduce((acc,item)=>{
+            acc[item] =false
+            return acc
+        },{}),
         errors:{}
     }
 }

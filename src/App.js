@@ -2,22 +2,26 @@
 import ToyForm from './main-component';
 import * as yup from 'yup';
 function App() {
+  const initialValues = {
+    firstName: "",
+    lastName: ""
+  }
   let schema = yup.object().shape({
-    name: yup.string().email().required(),
-    lastname: yup.string().required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
   });
   return (
     <div className="app">
       <h1>Sample Form</h1>
       <ToyForm
-        initialValues={{
-          name: "uday",
-          address: "",
-          lastname:"",
-          gender: "male",
-          district: "Dhaka"
-        }}
+        initialValues={initialValues}
         validationSchema={schema}
+        onSubmit={(values, { resetForm, setFieldValue }) => {
+          alert(JSON.stringify(values))
+        }}
+        onReset={(values, { resetForm }) => {
+          resetForm()
+        }}
       >
         {
           ({
@@ -26,26 +30,45 @@ function App() {
             setFieldValue,
             errors,
             touched,
-            handleBlur
+            handleBlur,
+            handleReset,
+            handleSubmit
           }) => <>
-              <label htmlFor="name">First Name</label>
-              <input
-                id = "name"
-                name="name"
-                value={values?.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <label htmlFor="name">Last Name</label>
-              <input
-                name="lastname"
-                value={values?.lastname}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+              <div className=''>
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  value={values?.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {
+                  errors?.firstName && <span className="error">{errors?.firstName?.message}</span>
+                }
+              </div>
 
-              <button>Submit</button>
-              <button>Reset</button>
+              <div className="mt-1">
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  value={values?.lastName}
+                  onChange={e => {
+                    setFieldValue("lastName", e?.target?.value)
+                  }}
+                  onBlur={handleBlur}
+                />
+                {
+                  errors?.lastName && <span className="error">{errors?.lastName?.message}</span>
+                }
+              </div>
+
+              <div className="mt-1">
+                <button type='button' onClick={handleSubmit}>Submit</button>
+                <button type='button' onClick={handleReset}>Reset</button>
+              </div>
+
 
             </>
         }

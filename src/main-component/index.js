@@ -1,43 +1,50 @@
 import { useEffect, useReducer } from "react"
 import reducer from "./state/reducer"
-import { SET_ERRORS, SET_FIELD_TOUCHED, SET_FIELD_VALUE, SET_RESET, SET_VALUES } from "./state/type"
+import { SET_ERRORS, SET_FIELD_TOUCHED, SET_FIELD_VALUE, SET_RESET, SET_TOUCHED, SET_VALUES } from "./state/type"
 import { getInitialState } from "./state/utils"
 
-const ToyForm = ({ initialValues = {}, validationSchema,onSubmit,onReset, children }) => {
+const ToyForm = ({ initialValues = {}, validationSchema, onSubmit, onReset, children }) => {
 
     const [state, dispatch] = useReducer(reducer, getInitialState(initialValues))
 
 
-    const checkValidity = (schema, values) => {
-        schema?.validate(values, { abortEarly: false })
-            .then(valid => {
-                dispatch({
-                    type: SET_ERRORS,
-                    errors: {},
-                    isValid: true
-                })
-            })
-            .catch(err => {
-                dispatch({
-                    type: SET_ERRORS,
-                    errors: err?.inner?.reduce((acc, error) => {
+    const checkValidity = async (schema, values, touched) => {
+        try {
+            await schema?.validate(values, { abortEarly: false })
+            return {
+                isValid: true,
+                errors: {}
+            }
+        } catch (err) {
+            return {
+                isValid: false,
+                errors: err?.inner?.reduce((acc, error) => {
+                    if (touched[error.path]) {
                         acc[error.path] = {
                             value: error?.value,
                             message: error?.message,
                             type: error?.type
                         }
-                        return acc
-                    }, {}),
-                    isValid: false
-                })
-            })
+                    }
+                    return acc
+                }, {}),
+            }
+        }
+    }
+
+    const setCheckResult = async (schema, values, touched) => {
+        const obj = await checkValidity(schema, values, touched)
+        dispatch({
+            type: SET_ERRORS,
+            ...obj
+        })
     }
 
     useEffect(() => {
         if (state?.values && validationSchema) {
-            checkValidity(validationSchema, state?.values)
+            setCheckResult(validationSchema, state?.values, state?.touched)
         }
-    }, [state?.values, validationSchema])
+    }, [state?.values, state?.touched, validationSchema])
 
 
 
@@ -76,8 +83,15 @@ const ToyForm = ({ initialValues = {}, validationSchema,onSubmit,onReset, childr
             value: values
         })
     }
-    const handleSubmit =()=>{
-        onSubmit && onSubmit(state?.values,{
+    const handleSubmit = async () => {
+        // set
+        const touched = Object.keys(state.touched).reduce((acc, item) => {
+            acc[item] = true
+            return acc
+        }, {})
+        setCheckResult(validationSchema, state?.values, touched)
+        const obj = await checkValidity(validationSchema, state?.values, touched)
+        obj?.isValid && onSubmit && onSubmit(state?.values, {
             ...state,
             resetForm,
             handleChange,

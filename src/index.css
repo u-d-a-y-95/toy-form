@@ -31,7 +31,6 @@ Label{
 input{
   display: block;
   width: 350px;
-  margin: 10px 0;
   padding: 10px 10px;
   font-size: 1rem;
 }
@@ -49,4 +48,13 @@ button{
   margin-top: 10px;
   font-size: .9rem;
   border-radius: 5px;
+}
+
+.error{
+  color: tomato;
+  font-weight: bold;
+}
+
+.mt-1{
+  margin-top: 10px;
 }
