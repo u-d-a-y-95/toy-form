@@ -7,7 +7,8 @@ function App() {
     lastname: yup.string().required(),
   });
   return (
-    <div className="App">
+    <div className="app">
+      <h1>Sample Form</h1>
       <ToyForm
         initialValues={{
           name: "uday",
@@ -27,21 +28,24 @@ function App() {
             touched,
             handleBlur
           }) => <>
-              {
-                console.log(errors)
-              }
+              <label htmlFor="name">First Name</label>
               <input
+                id = "name"
                 name="name"
                 value={values?.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              <label htmlFor="name">Last Name</label>
               <input
                 name="lastname"
                 value={values?.lastname}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+
+              <button>Submit</button>
+              <button>Reset</button>
 
             </>
         }
