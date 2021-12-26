@@ -9,7 +9,7 @@ Build forms in React, without any hassel
 
 # Introduction
 Toy Form is a thin  wrapper for Form, which is inspired from [Formik](https://formik.org/docs/overview).
-It gives some api to easily handle form state.[Yup](https://github.com/jquense/yup) can integrated easily
+It gives some api to handle form state easily.[Yup](https://github.com/jquense/yup) can be integrated easily
 
 
 ### N.B
