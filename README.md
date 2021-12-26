@@ -13,4 +13,4 @@ It gives some api to easily handle form state.[Yup](https://github.com/jquense/y
 
 
 ### N.B
-This is fun project .please don't use it in production 
+This is a fun project .please don't use it in production 
