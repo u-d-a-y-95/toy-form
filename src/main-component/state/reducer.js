@@ -11,10 +11,10 @@ const reducer = (state, action) => {
             state.values = { ...state?.values }
             return { ...state }
         case SET_TOUCHED:
-            state.values = action.value;
+            state.touched = action.value;
             return { ...state }
         case SET_FIELD_TOUCHED:
-            state.touched = action.value;
+            state.touched[action.name] = action.value;
             state.touched = { ...state?.touched }
             return { ...state }
         case SET_ERRORS:

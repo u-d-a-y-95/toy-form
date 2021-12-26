@@ -7,8 +7,8 @@ function App() {
     lastName: ""
   }
   let schema = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
+    firstName: yup.string().required("First Name is required"),
+    lastName: yup.string().required("Last Name is required"),
   });
   return (
     <div className="app">

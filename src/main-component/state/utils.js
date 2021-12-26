@@ -1,5 +1,3 @@
-// import { object } from "yup"
-
 export const getInitialState = (initialValue) =>{
     const obj = {...initialValue}
 

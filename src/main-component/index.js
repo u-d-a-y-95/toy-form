@@ -44,6 +44,7 @@ const ToyForm = ({ initialValues = {}, validationSchema, onSubmit, onReset, chil
         if (state?.values && validationSchema) {
             setCheckResult(validationSchema, state?.values, state?.touched)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state?.values, state?.touched, validationSchema])
 
 
@@ -89,7 +90,11 @@ const ToyForm = ({ initialValues = {}, validationSchema, onSubmit, onReset, chil
             acc[item] = true
             return acc
         }, {})
-        setCheckResult(validationSchema, state?.values, touched)
+
+        dispatch({
+            type:SET_TOUCHED,
+            value:touched
+        })
         const obj = await checkValidity(validationSchema, state?.values, touched)
         obj?.isValid && onSubmit && onSubmit(state?.values, {
             ...state,
